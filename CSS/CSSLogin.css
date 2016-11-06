@@ -1,0 +1,351 @@
+@charset "utf-8";
+/* CSS Document */
+/* Logo
+font-family: 'Karla', sans-serif;
+font-family: 'Comfortaa', cursive;
+font-family: 'Kreon', serif;
+*/
+body 
+{
+ background: #eeeeee;
+ margin:0px;
+}
+p
+{
+	font-family: 'Lato', sans-serif;
+}
+a
+{
+    
+	color: #E0F2F1;
+	text-decoration: none;
+}
+ul
+{
+    padding: 0px;
+    margin: 0px
+       
+}
+footer
+{
+    background:#009688;
+    padding: 10px;
+}
+header
+{
+        padding: 10px;
+	background:#009688;
+        box-shadow: 0px 0px 10px grey;
+}
+header img
+{
+    height: 25px;
+    width: 25px;
+}
+header h1
+{
+    display: inline;
+    font-family: 'Comfortaa', cursive;
+}
+header a
+{
+    margin-left: 50px;
+}
+
+.HeaderLogin
+{
+        display: inline;
+	padding:8px;
+	padding-left:70%;
+        
+}
+
+.Notificacion
+{
+    margin-left: 380px;
+    display: inline-block;
+}
+
+#ImagenLogin
+{
+    display: inline;
+}
+
+.HeaderPrincipal
+{
+        padding-top: 2px;
+        padding-bottom: 3px;	
+}
+.Buscador
+{
+	padding-left:40%;
+	display:inline;
+}
+
+.Publicar
+{
+	background:#26A69A;
+	margin-top:20px;
+	margin-left:20%;
+	margin-right:20%;
+        margin-bottom: 30px;
+        box-shadow: 0px 7px 20px grey;
+}
+.EspacioSubir
+{
+	padding:3%;
+}
+
+.Publicacion
+{
+    margin-left: 40px;
+}
+.NombrePerfilPost
+{
+    
+    display: inline;
+}
+.TituloPost
+{
+    margin-left: 20px;
+}
+.PerfilPost
+{
+    
+}
+.PerfilPost p
+{
+    display: inline;
+}
+.PerfilPost img
+{
+    background-repeat: round;
+    border-radius: 2px;
+    margin-left: 20px;
+    margin-top:  10px;
+    height: 50px;
+    width: 50px;
+
+}
+.Publicacion p+img
+{
+        padding-left:20px;
+        padding-right: 20px;
+        max-height: 800px;
+        max-width:  800px;
+}
+
+.Publicacion p+video
+{
+        padding-left:20px;
+        padding-right: 20px;
+        max-height: 800px;
+        max-width:  800px;
+}
+
+.opcionesPublicacionM
+{
+    margin-top: 5px;
+    margin-right: 5px;
+    float: right;
+    list-style-type:none;
+    display: inline-block; 
+}
+.opcionesPublicacionM img
+{
+    height: 25px;
+    width: 25px; 
+}
+
+.opcionesPublicacion
+{
+    margin-top: 20px;
+    margin-right: 20px;
+    float: right;
+    list-style-type:none;
+    display: inline-block;
+    display: none;
+}
+
+.opcionesPublicacionLista
+{
+    box-shadow: 0px 0px 15px black;
+    padding: 5px;
+    background:#26A69A;
+    border-color: #000;
+    border: 5px;
+    margin-top: 20px;
+    margin-right: 20px;
+    float: right;
+    list-style-type:none;
+    display: inline-block;
+    
+}
+
+.opcionesLista
+{
+    margin-top: 20px;
+    margin-right: 20px;
+    float: right;
+    list-style-type:none;
+    display: inline-block;
+    
+}
+
+.opcionesBoton
+{
+    
+}
+
+
+
+.PublicarComentario input[type="text"]
+{
+	margin:10px;
+	padding:5px;
+	width:80%;
+}
+
+.Posts
+{
+    background:#26A69A;
+    box-shadow: 0px 7px 20px grey;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    display: inline-block;
+    
+}
+.ComentarioTitulo
+{
+    margin-left: 20px;
+}
+.Comentario
+{
+    
+}
+
+.Comentario p
+{
+    padding-left: 50px;
+}
+
+.Publicacion ul
+{
+
+    list-style-type:none;
+}
+.Comentario a
+{
+    
+    font-weight: bold;
+
+}
+
+.ImagenPortada img
+{
+    
+    position: relative;
+    background-repeat: round;
+    margin-left: 2%;
+    height: 350px;
+    left: -20px;
+    width: 80%;
+    
+}
+.AvatarPortada img
+{
+    
+    border-radius: 8px;
+    border-width: 5px;
+    border-color: white;
+    border-style: solid;
+    position: relative;
+    background-repeat: round;
+    border-radius: 2px;
+    height:180px;
+    width: 180px;
+    top: -180px;
+    left: 50px;
+    display: inline;
+}
+
+.Registrar
+{
+	padding:10px;
+	padding-top:100px;
+	padding-left:50%;
+}	
+
+
+.Registrar #Salto
+{
+    display:block;
+}
+
+.Registrar input
+{
+        margin-bottom: 5px;
+        alignment-adjust: central;
+}
+.Registrar select
+{
+            margin-bottom: 5px;
+        alignment-adjust: central;
+}
+	
+input[type="submit"]
+{
+	background-color:#B2DFDB;
+}
+
+.DatosPersonales
+{
+    
+    display: inline-block;
+    margin-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 20px;
+    margin-bottom:  50px;
+    background:#26A69A;
+}
+
+.DatosPersonalesTipoPerfil
+{
+    padding: 5px;
+    margin-left: 50px;
+    padding-right: 50px;
+    background:#26A69A;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+.DatosPersonales input
+{
+    margin-left: 50px;
+    display: block;
+}
+.DatosPersonales label
+{
+    margin-left: 50px;
+}
+.PostDenuncia
+{
+    margin-bottom: 10px;
+    margin-top: 20px;
+    background:#26A69A;
+    box-shadow: 0px 7px 20px grey;
+    margin-left: 20px;
+    margin-right: 20px;
+    display: inline-block;
+    
+}
+
+.PostDenuncia img
+{
+    margin: 10px;
+}
+
+.PostDenuncia .FormulacioDenuncia
+{
+    margin-left: 20px;
+    margin-top: 15px;
+}
