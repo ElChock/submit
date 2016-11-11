@@ -182,4 +182,37 @@ class DaoUsuario {
             }
         }
     }    
+    
+    public function BuscarUsuario($idUsuario)
+    {
+        $conn = new MySqlCon();
+        $connect=$conn->connect();
+        if(mysqli_connect_errno())
+        {
+            printf("Error de conexion: %s\n",  mysqli_connect_error());
+        }
+        else
+        {
+            $stmt=$connect->prepare("call sp_buscarusuario($idUsuario)");
+            if($stmt->execute())
+            {
+                $usuario= new Usuario;
+                $stmt->bind_result($idUsuario,$fotoPerfil,$fotoPortada,$nickName);
+                $stmt->fetch();
+                $usuario->setFotoPerfil($fotoPerfil);
+                $usuario->setFotoPortada($fotoPortada);
+                $usuario->setIdUsuario($idUsuario);
+                $usuario->setNickname($nickName);
+                return $usuario;
+                
+            }
+            else 
+            {
+                $stmt->error;
+            }
+        }
+        
+    }
+    
+
 }

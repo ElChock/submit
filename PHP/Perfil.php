@@ -1,5 +1,6 @@
 <?php
 include  "../Model/Usuario.php";
+include_once '../Dao/DaoUsuario.php';
 include_once '../Dao/DaoPublicacion.php';
 include_once '../Model/Publicacion.php';
 include_once '../Model/Comentario.php';
@@ -13,11 +14,14 @@ if($_SESSION["usuario"]==null)
 $s=$_SESSION["usuario"];
 $usuario= unserialize($s);  
 
-if($_SERVER["REQUEST_METHOD"]=="POST" && !empty($_GET["id"]))
+if($_SERVER["REQUEST_METHOD"]=="GET" && !empty($_GET["id"]))
 {
 $daoPublicacion= new DaoPublicacion();
 $listPublicacion= $daoPublicacion->BuscarPublicacionesPropias($_GET["id"]);
 $daoComentario= new DaoComentario();
+$usuarioPerfil= new Usuario();
+$daoUsuario= new DaoUsuario();
+$usuarioPerfil=$daoUsuario->BuscarUsuario($_GET["id"]);
 }
 else
 {
@@ -77,28 +81,33 @@ $daoComentario= new DaoComentario();
         </form>
     </div>
     <!-- seguidores -->
-    <div class="Posts">
-        <div>
-            <label>
-                Gente siguiendo
-            </label>
-            <label>
-                Seguidores
-            </label> 
-        </div>
+    <form action="../Controller/ControllerSeguidores.php" method="POST">
+        <?php if(!empty($usuarioPerfil)){ ?>
+        <input type="hidden" name="idSeguir" value="<?php echo $usuarioPerfil->getIdUsuario(); ?>">
+        <?php } ?>
+        <div class="Posts">
+            <div>
+                <label>
+                    Gente siguiendo
+                </label>
+                <label>
+                    Seguidores
+                </label> 
+            </div>
 
-        <div>
-            <label>
-                200
-            </label>
-            <label>
-                10
-            </label>
+            <div>
+                <label>
+                    200
+                </label>
+                <label>
+                    10
+                </label>
+            </div>
+            <?php if(!empty($usuarioPerfil)){ ?>
+            <input type="submit"  value="seguir" >
+            <?php } ?>
         </div>
-            
-        
-    </div>
-    
+    </form>
 	<!-- Publicacion -->
     <div  class="Publicacion"> 
         
