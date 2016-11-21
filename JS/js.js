@@ -15,7 +15,15 @@ $(document).ready(function ()
         var img=$(this).find("#opciones");
         ul.removeClass("opcionesPublicacionM").addClass("opcionesPublicacion");
         img.removeClass("opcionesPublicacion").addClass("opcionesPublicacionLista");
+
+        
     });
     
+    $(".Notificacion").click(function ()
+    {
+        var li=$(this).find(".Notificacionli");
+        
+        li.toggleClass("Ocultar");
+    });
     
  });

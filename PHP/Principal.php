@@ -13,7 +13,12 @@ if($_SESSION["usuario"]==null)
     header('Location: ../PHP/Login.php');
 }
 $s=$_SESSION["usuario"];
+
 $usuarioSesion= unserialize($s);  
+if($usuarioSesion->getIdUsuario()==null)
+{
+    header('Location: ../PHP/Login.php');
+}
 
 $daoPublicacion= new DaoPublicacion();
 $listPublicacion= $daoPublicacion->BuscarPublicacion($usuarioSesion->getIdUsuario());
@@ -43,6 +48,19 @@ $daoComentario= new DaoComentario();
         </form>
         <div class="Notificacion">
             <img src="../Multimedia/notificacion.png" alt="Notificaciones" >
+            <ul class="Notificacionli Ocultar">
+                <li>
+                    <div>
+                        <a href="Publicacion.php?idPublicacion=2">nuevo comentario</a>
+                    </div>
+                    <div>
+                        <a href="">nuevo like</a>
+                    </div>
+                    <div>
+                        <a href="">nuevo comentario</a>
+                    </div>
+                </li>
+            </ul>
         </div>    
         
         <a href="../PHP/Perfil.php">Perfil</a>
@@ -92,97 +110,9 @@ $daoComentario= new DaoComentario();
             $publicacion=new Publicacion();
             $usuario=$listPublicacion[$index]->getUsuario();
             $publicacion=$listPublicacion[$index]->getPublicacion();
-            if($publicacion->getTipoContenido()=="mp4")
-            {
-            ?>
-            <li class="Posts" id="<?php echo $publicacion->getIdPublicacion() ?>">
-                <div class="PerfilPost">
-                    <a href="" class="ProfilePicturePost">
-                        <?php 
-                            if(empty($usuario->getFotoPerfil())) 
-                            {
-                        ?>
-                            <img src="../Multimedia/unknown.jpg" alt="Profile Picture">
-                        <?php
-                            }
-                        
-                            else
-                            {
-                        ?>
-                            <img src="<?php echo 'data:image/jpeg;base64,'.base64_encode($usuario->getFotoPerfil()).''; ?>" alt="Profile Picture">
-                        <?php
-                            }
-                        ?>
-                        
-                        
-                    </a>
-                    <a href=""><p class="NombrePerfilPost"><?php echo $usuario->getNombre() ?></p></a>
-                </div>
-                <p class="TituloPost"><?php echo $publicacion->getTitulo(); ?></p>
-                <video controls>
-                    <source src="<?php echo $publicacion->getPath()?>"  type=video/mp4> 
-                    Este browser no acepta videos
-		</video>
-                <div>
-                    <p class="ComentarioTitulo"><?php echo $publicacion->getDescripcion() ?></p>
-                </div>
-                <div class="PublicarComentario" >
-                    <form action="../Controller/ControllerComentario.php" method="POST"  >
-                        <input type="text" required name="comentario" placeholder="Comentar" min="3" max="200">
-                        <input type="hidden" name="idPublicacion" value="<?php echo $publicacion->getIdPublicacion() ?>">
-                        <input type="submit" name="comentar">
-                    </form>
-                </div>
-                <ul class="Comentario">
-                    
-                    <?php
-                    $listComentario=$daoComentario->BuscarComentario($publicacion->getIdPublicacion());
-                    for($index2=0;$index2<count($listComentario);$index2++)
-                    {
-                        $comentario = new Comentario();
-                        $usuario= new usuario();
-                        $comentario=$listComentario[$index2];
-                        $usuario=$comentario->getUsuario();
-                    ?>
-                    
-                    <li >
-                        <div class="PerfilPost">
-                            <a href="" class="ProfilePicturePost">
-                            <?php 
-                                if(empty($usuario->getFotoPerfil())) 
-                                {
-                            ?>
-                                <img src="../Multimedia/unknown.jpg" alt="Picture">
-                            <?php
-                                }
 
-                                else
-                                {
-                            ?>
-                                <img src="<?php echo 'data:image/jpeg;base64,'.base64_encode($usuario->getFotoPerfil()).''; ?>" alt="Profile Picture">
-                            <?php
-                                }
-                            ?>
-                            </a>
-                            <a href=""><label class="NombrePerfilPost"><?php echo $usuario->getNombre() ?><label></a>
-                        </div>
-                        <div><?php echo $comentario->getFecha() ?></div>
-                        <div >
-                            <p> <?php echo $comentario->getComentario() ?></p>
-                        </div>
-                    </li>
-                    
-                    <?php
-                    
-                    }
-                    ?>
-                    
-                </ul>
-            </li>
-           <?php
-           }
-            else {
             ?>
+
             <li class="Posts" id="<?php echo $publicacion->getIdPublicacion() ?>">
                 <div class="PerfilPost">
                     <a href=Perfil.php?id=<?php echo $publicacion->getIdUsuario() ?> class="ProfilePicturePost">
@@ -217,16 +147,13 @@ $daoComentario= new DaoComentario();
                                 <li>
                                 Editar
                                 </li>
-                                <li>
-                                Denunciar
-                                </li>
                                 <?php
                                 } 
                                 else
                                 {
                                 ?>
                                 <li>
-                                Denunciar
+                                    <a href="../Controller/ControllerDenuncia.php?idPublicacion=<?php echo $publicacion->getIdPublicacion(); ?>&idUsuario=<?php echo $publicacion->getIdUsuario() ?>" >Denunciar</a>
                                 </li>                                
                                 <?php
                                 }
@@ -239,7 +166,23 @@ $daoComentario= new DaoComentario();
                 </div>
                 
                 <p class="TituloPost"><?php echo $publicacion->getTitulo(); ?></p>
+                
+                <?php if( $publicacion->getTipoContenido()=="mp4"){ ?>
+                
+                <video controls>
+                    <source src="<?php echo $publicacion->getPath()?>"  type=video/mp4> 
+                    Este browser no acepta videos
+		</video>
+                <?php } 
+                else
+                {
+                    ?>
                 <img src="<?php echo $publicacion->getPath() ?>" alt="Publicacion">
+                    <?php
+
+                }?>
+                
+                
                 <div>
                     <p class="ComentarioTitulo"><?php echo $publicacion->getDescripcion() ?></p>
                 </div>
@@ -297,7 +240,7 @@ $daoComentario= new DaoComentario();
             </li>
             
                 <?php 
-                }
+                
             }
                 
                 ?> 

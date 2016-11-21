@@ -32,10 +32,11 @@ class DaoPublicacion {
             $stmt->bind_param("issss", $publicacion->getIdUsuario(),$publicacion->getDescripcion(),$publicacion->getTitulo(),$publicacion->getPath(),$publicacion->getTipoContenido());
             if($stmt->execute())
             {
-                
+                $connect->close();
             }
             else
             {
+                $connect->close();
                 echo $stmt->error;
             }
         }

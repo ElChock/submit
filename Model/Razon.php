@@ -11,7 +11,7 @@
  *
  * @author Ayrton
  */
-class Razon {
+class Razon implements JsonSerializable {
     
     function getIdRazon() {
         return $this->idRazon;
@@ -29,7 +29,11 @@ class Razon {
         $this->descripcion = $descripcion;
     }
 
-        //put your code here
+    public function jsonSerialize() {
+        return get_object_vars($this);
+    }
+
+    //put your code here
     private $idRazon;
     private $descripcion;
 }

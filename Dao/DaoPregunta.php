@@ -44,6 +44,7 @@ class DaoPregunta {
                 echo $stmt->error;
             }
         }
+        $connect->close();
         return $listaPreguntas;
     }
 }

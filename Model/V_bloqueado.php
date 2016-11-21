@@ -7,31 +7,21 @@
  */
 
 /**
- * Description of Bloqueado
+ * Description of V_bloqueado
  *
  * @author Ayrton
  */
-class Bloqueado {
-    
-    function getPermanente() {
-        return $this->permanente;
-    }
-
-    function setPermanente($permanente) {
-        $this->permanente = $permanente;
-    }
-
-        
+class V_bloqueado {
     function getIdBloqueado() {
         return $this->idBloqueado;
     }
 
-    function getIdRazon() {
-        return $this->idRazon;
+    function getRazon() {
+        return $this->razon;
     }
 
-    function getIdUsuario() {
-        return $this->idUsuario;
+    function getIdUsairio() {
+        return $this->idUsairio;
     }
 
     function getFecha() {
@@ -42,16 +32,20 @@ class Bloqueado {
         return $this->descripcion;
     }
 
+    function getPermanente() {
+        return $this->permanente;
+    }
+
     function setIdBloqueado($idBloqueado) {
         $this->idBloqueado = $idBloqueado;
     }
 
-    function setIdRazon($idRazon) {
-        $this->idRazon = $idRazon;
+    function setRazon($razon) {
+        $this->razon = $razon;
     }
 
-    function setIdUsuario($idUsuario) {
-        $this->idUsuario = $idUsuario;
+    function setIdUsairio($idUsairio) {
+        $this->idUsairio = $idUsairio;
     }
 
     function setFecha($fecha) {
@@ -62,9 +56,14 @@ class Bloqueado {
         $this->descripcion = $descripcion;
     }
 
-        private $idBloqueado;
-    private $idRazon;
-    private $idUsuario;
+    function setPermanente($permanente) {
+        $this->permanente = $permanente;
+    }
+
+        
+    private $idBloqueado;
+    private $razon;
+    private $idUsairio;
     private $fecha;
     private $descripcion;
     private $permanente;

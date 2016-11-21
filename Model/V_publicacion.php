@@ -14,7 +14,7 @@
 include_once 'Publicacion.php';
 include_once 'Usuario.php';
 include_once 'Likes.php';
-class V_publicacion {
+class V_publicacion implements JsonSerializable {
     function getPublicacion() {
         return $this->publicacion;
     }
@@ -43,7 +43,10 @@ class V_publicacion {
         $this->likes = $likes;
     }
 
-    
+    public function jsonSerialize() {
+        return get_object_vars($this);
+    }
+
     private $publicacion;
     private $usuario;
     private $likes;

@@ -31,10 +31,11 @@ class DaoSeguidor {
          {
             if($stmt->execute())
             {
-
+                $connect->close();
             }
             else
             {
+                $connect->close();
                echo $stmt->error;
             }            
          }                    

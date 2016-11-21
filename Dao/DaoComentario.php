@@ -69,10 +69,12 @@ class DaoComentario {
             $stmt->bind_param("iis",$comentario->getIdUsuario(), $comentario->getIdPublicacion(),$comentario->getComentario());
             if($stmt->execute())
             {
-                echo "funciono el store";
+                $connect->close();
+                
             }
             else
             {
+                $connect->close();
                 echo $stmt->error;
             }
         }

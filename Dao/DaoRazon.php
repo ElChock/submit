@@ -7,17 +7,16 @@
  */
 
 /**
- * Description of DaoPais
+ * Description of DaoRazon
  *
  * @author Ayrton
  */
 include_once 'MySqlCon.php';
-include_once '../Model/Pais.php';
-class DaoPais {
-    public function sp_obtenerPais ()
+include_once '../Model/Razon.php';
+class DaoRazon  {
+    public function BuscarRazon()
     {
-        $listaPais=array();
-        $conn = new MySqlCon();
+        $conn= new MySqlCon();
         $connect = $conn->connect();
         if(mysqli_connect_errno())
         {
@@ -25,28 +24,28 @@ class DaoPais {
         }
         else 
         {
-            $stmt=$connect->prepare("call sp_obtenerPais()");
+            $stmt=$connect->prepare("call sp_BuscarRazon");
             if($stmt->execute())
             {
-                $stmt->bind_result($codigo,$nombre,$idPais);
+                $listRazon= array();
+                $stmt->bind_result($idRazon,$descripcion);
                 $contador=0;
-                while($stmt->fetch())
+                while ($stmt->fetch())
                 {
-                    $pais = new Pais();
-                    $pais->setCodigo($codigo);
-                    $pais->setIdPais($idPais);
-                    $pais->setNombre($nombre);
-                    $listaPais[$contador]=$pais;
+                    $razon = new Razon();
+                    $razon->setDescripcion($descripcion);
+                    $razon->setIdRazon($idRazon);
+                    $listRazon[$contador]=$razon;
                     $contador++;
                 }
+                $connect->close();
+                return $listRazon;
             }
             else 
             {
-                  
+                $connect->close();
                 echo $stmt->error;
             }
-        }
-        $connect->close();
-        return $listaPais;
+        }        
     }
 }

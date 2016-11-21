@@ -11,7 +11,7 @@
  *
  * @author Ayrton
  */
-class Publicacion {
+class Publicacion implements JsonSerializable {
     
     function getTitulo() {
         return $this->titulo;
@@ -68,6 +68,10 @@ class Publicacion {
 
     function setFecha($fecha) {
         $this->fecha = $fecha;
+    }
+
+    public function jsonSerialize() {
+        return get_object_vars($this);
     }
 
     private $idPublicacion;

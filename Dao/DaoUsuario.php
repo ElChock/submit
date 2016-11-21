@@ -14,6 +14,7 @@
 include_once 'MySqlCon.php';
 include_once '../Model/Usuario.php';
 include_once '../Model/PreguntaUsuario.php';
+include_once '../Model/V_bloqueado.php';
 class DaoUsuario {
     //put your code here
     public function AltaUsuario(Usuario $usuario, PreguntaUsuario $pregunta)
@@ -35,11 +36,12 @@ class DaoUsuario {
                 $nickname;
                 $tipoPerfil;
                 $stmt->bind_result($idusuario,$nombre,$nickname,$tipoPerfil);
+                $stmt->fetch();
                 $usuario2 = new Usuario();
-                $usuario2->setIdUsuario($idUsuario);
+                $usuario2->setIdUsuario($idusuario);
                 $usuario2->setNombre($nombre);
                 $usuario2->setNickname($nickname);
-                $usuario2->setTipoperfir($tipoperfil);
+                $usuario2->setTipoperfir($tipoPerfil);
                 $connect->close();
                 return $usuario2;
             }
@@ -99,6 +101,67 @@ class DaoUsuario {
                 echo $stmt->error;
             }
             
+        }
+    }
+    
+    public function verificarBloqueado(Usuario $usuario)
+    {
+        $conn = new MySqlCon();
+        $connect = $conn->connect();
+        if(mysqli_connect_errno())
+        {
+            printf("Error de conexion: %s\n",  mysqli_connect_error());
+        }
+        else
+        {
+            $stmt=$connect->prepare("call sp_verificarBloqueado(?,?)");
+            $stmt->bind_param("ss", $usuario->getCorreo(),$usuario->getContraseña());
+            if($stmt->execute())
+            {
+                $stmt->bind_result($idusuario);
+                $stmt->fetch();
+                $connect->close();
+                return $idusuario;
+            }
+            else
+            {
+                $connect->close();
+                echo $stmt->error;
+            }
+        }
+    }
+    
+    public function RazonBloqueado($idUsuario)
+    {
+        $conn = new MySqlCon();
+        $connect = $conn->connect();
+        if(mysqli_connect_errno())
+        {
+            printf("Error de conexion: %s\n",  mysqli_connect_error());
+        }
+        else
+        {
+            $stmt=$connect->prepare("call sp_mostrarRazonBloqueo($idUsuario)");
+            if($stmt->execute())
+            {
+                $V_bloqueado= new V_bloqueado();
+                $stmt->bind_result($razon,$idUsuario,$fecha,$descripcion,$permanente);
+                $stmt->fetch();
+                $V_bloqueado->setDescripcion($descripcion);
+                $V_bloqueado->setFecha($fecha);
+                $V_bloqueado->setIdUsairio($idUsuario);
+                $V_bloqueado->setPermanente($permanente);
+                $V_bloqueado->setRazon($razon);
+                
+                $connect->close();
+                return $V_bloqueado;
+               
+            }
+            else
+            {
+                $connect->close();
+                echo $stmt->error;
+            }
         }
     }
     

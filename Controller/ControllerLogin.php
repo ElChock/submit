@@ -8,6 +8,7 @@
 include "../Model/Usuario.php";
 include_once '../Dao/DaoUsuario.php';
 include_once '../Model/PreguntaUsuario.php';
+include_once '../Model/V_bloqueado.php';
     $daoUsusuario=new DaoUsuario();
     $usuario = new Usuario();
     $pregunta = new PreguntaUsuario();
@@ -59,10 +60,13 @@ include_once '../Model/PreguntaUsuario.php';
 
         if(!empty($usuario)&&!empty($pregunta))
         {
-            if($usuariologin=$daoUsusuario->AltaUsuario($usuario, $pregunta))
+            $usuariologin= new Usuario();
+            $usuariologin=$daoUsusuario->AltaUsuario($usuario, $pregunta);
+            if($usuariologin->getIdUsuario()!=null)
             {
                 session_start();
-                $_SESSION["usuario"]=$usuariologin;
+                $s=  serialize($usuariologin);
+                $_SESSION["usuario"]=$s;
                 header('Location: ../PHP/Principal.php');
             }
             else
@@ -74,8 +78,8 @@ include_once '../Model/PreguntaUsuario.php';
     }
     if(!empty($_POST["login"]))
     {
-
-        session_start();
+        
+        
         if(!empty($_POST["email"]))
         {
             $usuario->setCorreo($_POST["email"]);
@@ -88,14 +92,32 @@ include_once '../Model/PreguntaUsuario.php';
 
         if(!empty($usuario))
         {
-            $usuarioLogin=$daoUsusuario->Login($usuario);
-            if(!empty($usuarioLogin))
+            
+            
+            $idUsuario=$daoUsusuario->verificarBloqueado($usuario);
+            
+            
+            if($idUsuario!=0)
             {
-                $s= serialize($usuarioLogin);
-
-                $_SESSION["usuario"]=$s;
-                header('Location: ../PHP/Principal.php');
+                $razonBloqueado= new V_bloqueado();
+                $razonBloqueado=$daoUsusuario->RazonBloqueado($idUsuario);
+                echo $razonBloqueado->getRazon();
             }
+            else 
+            {
+                session_start();
+                $usuarioLogin=$daoUsusuario->Login($usuario);
+
+                if(!empty($usuarioLogin))
+                {
+                    $s= serialize($usuarioLogin);
+
+                    $_SESSION["usuario"]=$s;
+                    header('Location: ../PHP/Principal.php');
+                }
+                
+            }
+            
 
         }
     }

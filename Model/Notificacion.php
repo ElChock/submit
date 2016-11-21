@@ -12,7 +12,15 @@
  * @author Ayrton
  */
 class Notificacion {
-    
+    function getDescripcion() {
+        return $this->descripcion;
+    }
+
+    function setDescripcion($descripcion) {
+        $this->descripcion = $descripcion;
+    }
+
+        
     function getIdNotificacion() {
         return $this->idNotificacion;
     }
@@ -53,9 +61,10 @@ class Notificacion {
         $this->fecha = $fecha;
     }
 
-        private $idNotificacion;
+    private $idNotificacion;
     private $vista;
     private $idUsuario;
     private $idPublicacion;
     private $fecha;
+    private $descripcion;
 }

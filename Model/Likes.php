@@ -11,7 +11,7 @@
  *
  * @author Ayrton
  */
-class Likes {
+class Likes implements JsonSerializable {
     
     function getIdUsuario() {
         return $this->idUsuario;
@@ -37,7 +37,11 @@ class Likes {
         $this->fecha = $fecha;
     }
 
-        private $idUsuario;
+    public function jsonSerialize() {
+        return get_object_vars($this);
+    }
+
+    private $idUsuario;
     private $idPublicacion;
     private $fecha;
 }

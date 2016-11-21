@@ -64,6 +64,31 @@ header a
 {
     margin-left: 380px;
     display: inline-block;
+    
+}
+
+
+.Notificacionli li
+{
+    background: #009688;
+    left: 70%;
+    top: 47px;
+    position: absolute;
+    list-style-type:none;
+    
+}
+.Ocultar
+{
+    display: none;
+}
+.NotificacionNone li
+{
+    background: #009688;
+    left: 70%;
+    top: 47px;
+    position: absolute;
+    list-style-type:none;
+    display: none;
 }
 
 #ImagenLogin
@@ -208,6 +233,7 @@ header a
 
 .Posts
 {
+    clear:both ;
     background:#26A69A;
     box-shadow: 0px 7px 20px grey;
     margin-bottom: 20px;
@@ -336,16 +362,25 @@ input[type="submit"]
     margin-left: 20px;
     margin-right: 20px;
     display: inline-block;
-    
+        
 }
 
 .PostDenuncia img
 {
-    margin: 10px;
+        padding-left:20px;
+        padding-right: 20px;
+        max-height: 800px;
+        max-width:  800px;
 }
 
 .PostDenuncia .FormulacioDenuncia
 {
     margin-left: 20px;
     margin-top: 15px;
+    
+}
+
+.PostDenuncia .FormulacioDenuncia  input
+{
+    display: inline-block;
 }

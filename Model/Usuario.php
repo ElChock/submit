@@ -12,7 +12,7 @@
  * @author Ayrton
  */
 
-class Usuario {
+class Usuario implements JsonSerializable {
     
     function getPublico() {
         return $this->publico;
@@ -150,6 +150,10 @@ class Usuario {
 
     function setTipoperfir($tipoperfir) {
         $this->tipoperfir = $tipoperfir;
+    }
+
+    public function jsonSerialize() {
+        return get_object_vars($this);
     }
 
     //put your code here
