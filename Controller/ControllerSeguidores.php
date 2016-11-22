@@ -8,18 +8,30 @@
 include_once '../Model/Usuario.php';
 include_once '../Model/Seguidor.php';
 include_once '../Dao/DaoSeguidor.php';
-if(!empty($_POST["idSeguir"]))
+
+if($_SERVER["REQUEST_METHOD"]=="POST" )
 {
-    session_start();
-    $usuario= new Usuario();
-    $s=$_SESSION["usuario"];
-    $usuario = unserialize($s);
-    $seguidor= new Seguidor();
-    $daoSeguidor= new DaoSeguidor();
+    if(!empty($_POST["idSeguir"]))
+    {
+        session_start();
+        $usuario= new Usuario();
+        $s=$_SESSION["usuario"];
+        $usuario = unserialize($s);
+        $seguidor= new Seguidor();
+        $daoSeguidor= new DaoSeguidor();
+
+        $seguidor->setIdUsuario($usuario->getIdUsuario());
+        $seguidor->setIdUsuarioSeguidor($_POST["idSeguir"]);
+        $daoSeguidor->AltaSeguidor($seguidor);
+        header('Location: ../PHP/Perfil.php?id='.$_POST["idSeguir"]);
+
+    }   
     
-    $seguidor->setIdUsuario($usuario->getIdUsuario());
-    $seguidor->setIdUsuarioSeguidor($_POST["idSeguir"]);
-    $daoSeguidor->AltaSeguidor($seguidor);
-    header('Location: ../PHP/Perfil.php?id='.$_POST["idSeguir"]);
-    
+    if(!empty($_POST["idUsuarioSeguidores"]))
+    {
+        
+    }
 }
+
+
+

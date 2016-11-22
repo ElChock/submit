@@ -17,7 +17,7 @@ include_once '../Model/V_publicacion.php';
 include_once '../Model/Usuario.php';
 include_once '../Model/Likes.php';
 class DaoPublicacion {
-    //put your code here
+    
     public function altaPublicacion(Publicacion $publicacion )
     {
         $conn = new MySqlCon();
@@ -145,5 +145,105 @@ class DaoPublicacion {
                 echo $stmt->error;
             }
         }       
+    }
+    
+    public function BuscarPublicacionId($idPublicacion)
+    {
+        $conn= new MySqlCon();
+        $connect = $conn->connect();
+        if(mysqli_connect_errno())
+        {
+            printf("Error de conexion: %s\n", mysqli_connect_error());
+        }
+        else
+        {
+            $stmt=$connect->prepare("call sp_buscarPublicacionId($idPublicacion)");
+            if($stmt->execute())
+            {
+                $publicacion = new Publicacion();
+                $usuario= new Usuario();
+                $vPublicacion= new V_publicacion();
+                $stmt->bind_result($idPublicacion,$idUsuario,$descripcion,$titulo,$path,$tipoContenido,$fecha,$fotoPerfil,$nombre,$like);
+                $stmt->fetch();
+                $publicacion->setDescripcion($descripcion);
+                $publicacion->setFecha($fecha);
+                $publicacion->setIdPublicacion($idPublicacion);
+                $publicacion->setIdUsuario($idUsuario);
+                $publicacion->setPath($path);
+                $publicacion->setTipoContenido($tipoContenido);
+                $publicacion->setTitulo($titulo);
+                $usuario->setFotoPerfil($fotoPerfil);
+                $usuario->setNombre($nombre);
+                $vPublicacion->setLikes($like);
+                $vPublicacion->setPublicacion($publicacion);
+                $vPublicacion->setUsuario($usuario);
+                
+                $connect->close();
+                return $vPublicacion;
+            }
+            else
+            {
+                $connect->close();
+                echo $stmt->error;
+            }
+        }
+    }
+    
+    public function BuscarPublicaciones($palabra,$fechaInicio,$fechaFin)
+    {
+        $conn= new MySqlCon();
+        $connect=$conn->connect();
+        if(mysqli_connect_errno())
+        {
+           printf("Error de conexion: %s\n", mysqli_connect_error()); 
+        }
+        else
+        {
+            try 
+            {
+                $vPublicacion= new V_publicacion();
+                $stmt=$connect->prepare("call sp_bucarPublicaciones($palabra,$fechaInicio,$fechaFin)"); 
+                if($stmt->execute())
+                {
+                    $publicacion = new Publicacion();
+                    $usuario= new Usuario();
+                    $vPublicacion= new V_publicacion();
+                    $stmt->bind_result($idPublicacion,$idUsuario,$descripcion,$titulo,$path,$tipoContenido,$fecha,$fotoPerfil,$nombre,$like);
+                    $stmt->fetch();
+                    $publicacion->setDescripcion($descripcion);
+                    $publicacion->setFecha($fecha);
+                    $publicacion->setIdPublicacion($idPublicacion);
+                    $publicacion->setIdUsuario($idUsuario);
+                    $publicacion->setPath($path);
+                    $publicacion->setTipoContenido($tipoContenido);
+                    $publicacion->setTitulo($titulo);
+                    $usuario->setFotoPerfil($fotoPerfil);
+                    $usuario->setNombre($nombre);
+                    $vPublicacion->setLikes($like);
+                    $vPublicacion->setPublicacion($publicacion);
+                    $vPublicacion->setUsuario($usuario);
+
+                    $connect->close();
+                    return $vPublicacion;
+                }
+                else
+                {
+                    $connect->close();
+
+                }
+                
+            } 
+            catch (Exception $exc) 
+            {
+                echo $exc->getTraceAsString();
+            } 
+            finally 
+            {
+                $connect->close();
+            }
+
+           
+            
+        }
     }
 }

@@ -78,6 +78,8 @@ else
     
     <ul>
         <?php
+        if(isset($listUsuario))
+        {
             for($index=0;$index<count($listUsuario);$index++)
             {
                 $usuario = new Usuario();
@@ -105,6 +107,7 @@ else
         
         <?php
             }
+        }
         ?>
     </ul>
 </body>

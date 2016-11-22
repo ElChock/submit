@@ -54,10 +54,13 @@ if(!empty($_POST["fotoPortada"]))
     $s=$_SESSION["usuario"];
     $usuario=  unserialize($s);
     $imagen=$_FILES["portada"]["tmp_name"];
-    $usuario->setFotoPortada( $daoUsuario->ActualizarFotoPortada($usuario->getIdUsuario(),$imagen));
-    $s=serialize($usuario);
-    $_SESSION["usuario"]=$s;
+    $foto=$daoUsuario->ActualizarFotoPortada($usuario->getIdUsuario(),$imagen);
+    $usuario->setFotoPortada($foto);
+    echo $foto;
+    $s2=serialize($usuario);
+    $_SESSION["usuario"]=$s2;
     header('Location: ../PHP/DatosPersonales.php');
+    
 }
 
 if(!empty($_POST["fotoPerfil"]))

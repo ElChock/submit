@@ -4,6 +4,8 @@ include_once '../Dao/DaoUsuario.php';
 include_once '../Dao/DaoPublicacion.php';
 include_once '../Model/Publicacion.php';
 include_once '../Model/Comentario.php';
+include_once '../Model/Seguidores.php';
+include_once '../Dao/DaoSeguidor.php';
 include_once '../Dao/DaoComentario.php';
 session_start();
 $usuario= new Usuario();
@@ -22,12 +24,21 @@ $daoComentario= new DaoComentario();
 $usuarioPerfil= new Usuario();
 $daoUsuario= new DaoUsuario();
 $usuarioPerfil=$daoUsuario->BuscarUsuario($_GET["id"]);
+$seguidores= new Seguidores();
+$daoSeguidor= new DaoSeguidor();
+$seguidores=$daoSeguidor->Seguidores($_GET["id"]);
 }
 else
 {
 $daoPublicacion= new DaoPublicacion();
 $listPublicacion= $daoPublicacion->BuscarPublicacionesPropias($usuario->getIdUsuario());
 $daoComentario= new DaoComentario();
+$seguidores= new Seguidores();
+$daoSeguidor= new DaoSeguidor();
+$seguidores=$daoSeguidor->Seguidores($usuario->getIdUsuario());
+$usuarioPerfil= new Usuario();
+$usuarioPerfil->setFotoPerfil($usuario->getFotoPerfil());
+$usuarioPerfil->setFotoPortada($usuario->getFotoPortada());
 }
 
     
@@ -38,7 +49,7 @@ $daoComentario= new DaoComentario();
 <html>
 <head>
 <meta charset="utf-8">
-<title>Documento sin título</title>
+<title>Submit</title>
 <link href="../CSS/CSSLogin.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -52,13 +63,15 @@ $daoComentario= new DaoComentario();
         <div class="Notificacion">
             <img src="../Multimedia/notificacion.png" alt="Notificaciones" >
         </div>    
-        <a href="../PHP/Perfil.php">Perfil</a>
+        <a href="../PHP/DatosPersonales.php">Editar perfil</a>
         <a href="../Controller/ControllerLogin.php?cerrarSesion=1" >cerrar sesion</a>    
     </header>
+    
+    
     <!-- imagen perfil y portada-->
     <div class="ImagenPortada" >
         <form action="../Controller/ControllerDatosPersonales.php" method="POST" enctype="multipart/form-data">
-            <img src="<?php echo 'data:image/jpeg;base64,'.base64_encode($usuario->getFotoPortada()).''; ?>">
+            <img src="<?php echo 'data:image/jpeg;base64,'.base64_encode($usuarioPerfil->getFotoPortada()).''; ?>">
         <?php
         if(!$_SERVER["REQUEST_METHOD"]=="GET")
         {
@@ -70,7 +83,7 @@ $daoComentario= new DaoComentario();
     </div>
     <div class="AvatarPortada">
         <form action="../Controller/ControllerDatosPersonales.php" method="POST" enctype="multipart/form-data">
-            <img src="<?php echo 'data:image/jpeg;base64,'.base64_encode($usuario->getFotoPerfil()).''; ?>" alt="Profile Picture">
+            <img src="<?php echo 'data:image/jpeg;base64,'.base64_encode($usuarioPerfil->getFotoPerfil()).''; ?>" alt="Profile Picture">
         <?php
         if(!$_SERVER["REQUEST_METHOD"]=="GET")
         {
@@ -80,29 +93,44 @@ $daoComentario= new DaoComentario();
         <?php }?>
         </form>
     </div>
-    <!-- seguidores -->
+    
+    
+    <!-- seguidores -->  
     <form action="../Controller/ControllerSeguidores.php" method="POST">
         <?php if(!empty($usuarioPerfil)){ ?>
         <input type="hidden" name="idSeguir" value="<?php echo $usuarioPerfil->getIdUsuario(); ?>">
         <?php } ?>
         <div class="Posts">
-            <div>
-                <label>
-                    Gente siguiendo
-                </label>
-                <label>
-                    Seguidores
-                </label> 
-            </div>
+            <table>
+                <tr>
+                    <td>
+                        <label>
+                            Gente siguiendo
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                           Seguidores
+                       </label>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <?php echo $seguidores->getSigo() ?>
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                           <?php echo $seguidores->getMesiguen() ?>
+                       </label>                        
+                    </td>                    
+                </tr>
+                    
+            </table>
 
-            <div>
-                <label>
-                    200
-                </label>
-                <label>
-                    10
-                </label>
-            </div>
+
+
             <?php if(!empty($usuarioPerfil)){ ?>
             <input type="submit"  value="seguir" >
             <?php } ?>

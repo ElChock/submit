@@ -12,6 +12,7 @@
  * @author Ayrton
  */
 include_once '../Model/Seguidor.php';
+include_once '../Model/Seguidores.php';
 include_once 'MySqlCon.php';
 
 class DaoSeguidor {
@@ -44,6 +45,35 @@ class DaoSeguidor {
              $stmt->error;
          }
 
+        }
+    }
+    
+    public function Seguidores($idUsurario)
+    {
+        $conn= new MySqlCon();
+        $connect= $conn->connect();
+        if(mysqli_connect_errno())
+        {
+            printf("Error de conexión: %s\n", mysqli_connect_error());
+        }
+        else 
+        {
+            $stmt=$connect->prepare("call sp_seguidores($idUsurario)");
+            if($stmt->execute())
+            {
+                $seguidores= new Seguidores();
+                $stmt->bind_result($mesiguen,$sigo);
+                $stmt->fetch();
+                $seguidores->setMesiguen($mesiguen);
+                $seguidores->setSigo($sigo);
+                $connect->close();
+                return $seguidores;
+            }
+            else
+            {
+                echo $stmt->error;
+                $connect->close();
+            }
         }
     }
 }

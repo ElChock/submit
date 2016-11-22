@@ -5,6 +5,8 @@ include_once '../Dao/DaoPublicacion.php';
 include_once '../Model/Publicacion.php';
 include_once '../Model/Comentario.php';
 include_once '../Dao/DaoComentario.php';
+include_once '../Dao/DaoNotificacion.php';
+include_once '../Model/Notificacion.php';
 session_start();
 $usuario= new Usuario();
 $usuarioSesion= new Usuario();
@@ -23,7 +25,9 @@ if($usuarioSesion->getIdUsuario()==null)
 $daoPublicacion= new DaoPublicacion();
 $listPublicacion= $daoPublicacion->BuscarPublicacion($usuarioSesion->getIdUsuario());
 $daoComentario= new DaoComentario();
-
+$daoNotificacion= new DaoNotificacion();
+$notificacion = new Notificacion();
+$notificacion=$daoNotificacion->BuscarNotificacion($usuarioSesion->getIdUsuario());
 
 ?>
 
@@ -31,7 +35,7 @@ $daoComentario= new DaoComentario();
 <html>
 <head>
 <meta charset="utf-8">
-<title>Documento sin título</title>
+<title>Submit</title>
 <link href="../CSS/CSSLogin.css" rel="stylesheet" type="text/css">
 <script language="javascript" type="text/javascript" src="../JS/libs/jquery/jquery.js"></script>
 <script language="javascript" type="text/javascript" src="../JS/js.js"></script>
@@ -42,23 +46,26 @@ $daoComentario= new DaoComentario();
 <body>
     <header class="HeaderPrincipal">
         <a href="../PHP/Principal.php"><h1>S</h1></a>
-        <form  class="Buscador">
-            <input type="text" required min="2" maxlength="20">
+        <form action="../php/Busqueda.php" class="Buscador" method="get">
+            <input type="text" name="buscar" required min="2" maxlength="20">
             <input type="submit" value="Buscar">
+            <a href="../PHP/BusquedaPublicacion.php"><label>Buscar Publicacion</label></a>
         </form>
         <div class="Notificacion">
             <img src="../Multimedia/notificacion.png" alt="Notificaciones" >
             <ul class="Notificacionli Ocultar">
                 <li>
+                
+                    <?php
+                    for($index=0;$index<count($notificacion);$index++)
+                    {
+                    ?>
                     <div>
-                        <a href="Publicacion.php?idPublicacion=2">nuevo comentario</a>
+                        <a idNotificacion="<?php echo $notificacion[$index]->getIdNotificacion() ?>" href="Publicacion.php?idPublicacion=<?php echo $notificacion[$index]->getIdPublicacion() ?>"><?php echo $notificacion[$index]->getDescripcion() ?></a>
                     </div>
-                    <div>
-                        <a href="">nuevo like</a>
-                    </div>
-                    <div>
-                        <a href="">nuevo comentario</a>
-                    </div>
+                    <?php
+                    }?>
+                
                 </li>
             </ul>
         </div>    
@@ -110,7 +117,7 @@ $daoComentario= new DaoComentario();
             $publicacion=new Publicacion();
             $usuario=$listPublicacion[$index]->getUsuario();
             $publicacion=$listPublicacion[$index]->getPublicacion();
-
+            
             ?>
 
             <li class="Posts" id="<?php echo $publicacion->getIdPublicacion() ?>">
@@ -181,11 +188,19 @@ $daoComentario= new DaoComentario();
                     <?php
 
                 }?>
-                
+
                 
                 <div>
                     <p class="ComentarioTitulo"><?php echo $publicacion->getDescripcion() ?></p>
                 </div>
+                
+                <div>
+                    <form action="../Controller/ControllerLike.php" method="POST">
+                        <button type="submit" name="like" title="like"  value="<?php echo $publicacion->getIdPublicacion() ?>">Like</button>
+                    </form>
+                    <label>like <?php echo  $listPublicacion[$index]->getLikes(); ?></label>
+                </div>             
+                
                 <div class="PublicarComentario" >
                      <form action="../Controller/ControllerComentario.php" method="POST"  >
                         <input type="text" required name="comentario" placeholder="Comentar" min="3" max="200">
@@ -206,7 +221,7 @@ $daoComentario= new DaoComentario();
                     ?>
                     <li >
                         <div class="PerfilPost">
-                            <a href="" class="ProfilePicturePost">
+                            <a href=Perfil.php?id=<?php echo $comentario->getIdUsuario() ?> class="ProfilePicturePost">
                             <?php 
                                 if(empty($usuario->getFotoPerfil())) 
                                 {
@@ -223,7 +238,7 @@ $daoComentario= new DaoComentario();
                                 }
                             ?>
                             </a>
-                            <a href=""><label class="NombrePerfilPost"><?php echo $usuario->getNombre() ?><label></a>
+                            <a href=Perfil.php?id=<?php echo $comentario->getIdUsuario() ?>><label class="NombrePerfilPost"><?php echo $usuario->getNombre() ?><label></a>
                         </div>
                         <div><?php echo $comentario->getFecha() ?></div>
                         

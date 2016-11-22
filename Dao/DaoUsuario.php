@@ -207,6 +207,8 @@ class DaoUsuario {
             $stmt=$connect->prepare("call spc_fotoPortada('$data','$idUsuario')");
             if($stmt->execute())
             {
+                $stmt->bind_result($fotoPortada);
+                
                 $connect->close();
                 return $data;
             }
@@ -235,6 +237,7 @@ class DaoUsuario {
             $stmt=$connect->prepare("call spc_fotoPerfil('$data','$idUsuario')");
             if($stmt->execute())
             {
+                $stmt->bind_result($fotoPerfil);
                 $connect->close();
                 return $data;
             }
@@ -277,5 +280,45 @@ class DaoUsuario {
         
     }
     
+    public function BuscarPersonas($nombre)
+    {
+        $conn= new MySqlCon();
+        $connect = $conn->connect();
+        if(mysqli_connect_errno())
+        {
+            
+        }
+        else
+        {
+            try 
+            {
+                $listUsuario= array();
+                $stmt=$connect->prepare("call sp_bucarPersonas($nombre)");
+                $stmt->bind_result($idUsuario,$fotoPerfil,$nombre,$apellidoPaterno,$descripcion,$nickname);
+                $contador=0;
+                while ($stmt->fetch())
+                {
+                    $usuario = new Usuario();
+                    $usuario->setDescripcion($descripcion);
+                    $usuario->setFotoPerfil($fotoPerfil);
+                    $usuario->setIdUsuario($idUsuario);
+                    $usuario->setNickname($nickname);
+                    $usuario->setNombre($nombre);
+                    $usuario->setApellidoPaterno($apellidoPaterno);
+                    $listUsuario[$contador]=$usuario;
+                    $contador++;                          
+                }
+                return $listUsuario;
+            } 
+            catch (Exception $exc) 
+            {
+                echo $exc->getTraceAsString();
+            } 
+            finally 
+            {
+                $connect->close();
+            }
+        }
+    }
 
 }

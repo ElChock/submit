@@ -65,6 +65,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
             $bloqueado->setPermanente($_POST["permanente"]);
             $bloqueado->setDescripcion($_POST["comentario"]);
             $daoBloqueado->altaBloqueo($bloqueado);           
+            header('Location: ../PHP/Administrador.php');
         }
     }
 }

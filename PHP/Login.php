@@ -1,6 +1,7 @@
 
 
 <?php
+    include_once  "../Model/Usuario.php";
     include_once '../Dao/DaoPais.php';
     include_once  '../Model/Pais.php';
     include_once '../Dao/DaoPregunta.php';
@@ -10,6 +11,23 @@
     
     $daoPregunta= new DaoPregunta();
     $listaPregunta = $daoPregunta->obtenerPreguntas();
+    
+    session_start();
+    $usuario= new Usuario();
+    $usuarioSesion= new Usuario();
+
+    if( isset($_SESSION["usuario"]))
+    {
+         
+        $s=$_SESSION["usuario"];
+
+        $usuarioSesion= unserialize($s);  
+        if($usuarioSesion->getIdUsuario()!=null)
+        {
+            header('Location: ../PHP/Principal.php');
+        }
+    }
+
 ?>
 
 <!doctype html>
@@ -31,7 +49,7 @@
         <div>
           <a href="../Principal.php"><h1>S</h1></a>
           <form class="HeaderLogin" action="../../submit/Controller/ControllerLogin.php" method="POST">
-              <input type="email" required name="email" placeholder="Usuario">
+              <input type="email" required name="email" placeholder="correo">
               <input type="password" required name="contraseña" placeholder="Contraseña" min="8" >
               <input type="submit" name="login" class="BotonAceptar" formmethod="POST" value="Ingresar" onMouseOver="Actualizar(20)" >    
         </form>

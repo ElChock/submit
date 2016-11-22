@@ -1,3 +1,34 @@
+<?php
+include  "../Model/Usuario.php";
+include_once '../Dao/DaoPublicacion.php';
+include_once '../Model/Publicacion.php';
+include_once '../Model/Comentario.php';
+include_once '../Dao/DaoComentario.php';
+include_once '../Dao/DaoNotificacion.php';
+include_once '../Model/Notificacion.php';
+session_start();
+$usuario= new Usuario();
+$usuarioSesion= new Usuario();
+if($_SESSION["usuario"]==null)
+{
+    header('Location: ../PHP/Login.php');
+}
+$s=$_SESSION["usuario"];
+
+$usuarioSesion= unserialize($s);  
+if($usuarioSesion->getIdUsuario()==null)
+{
+    header('Location: ../PHP/Login.php');
+}
+
+$daoPublicacion= new DaoPublicacion();
+$listPublicacion= $daoPublicacion->BuscarPublicacionId($_GET["idPublicacion"]);
+$daoComentario= new DaoComentario();
+$daoNotificacion= new DaoNotificacion();
+$notificacion = new Notificacion();
+$notificacion=$daoNotificacion->BuscarNotificacion($usuarioSesion->getIdUsuario());
+?>
+
 <!doctype html>
 <html>
 <head>
@@ -19,15 +50,15 @@
             <img src="../Multimedia/notificacion.png" alt="Notificaciones" >
             <ul class="Notificacionli Ocultar">
                 <li>
+                    <?php
+                    for($index=0;$index<count($notificacion);$index++)
+                    {
+                    ?>
                     <div>
-                        <a href="Publicacion.php?idPublicacion=2">nuevo comentario</a>
+                        <a href="Publicacion.php?idPublicacion=<?php echo $notificacion[$index]->getIdPublicacion() ?>"><?php echo $notificacion[$index]->getDescripcion() ?></a>
                     </div>
-                    <div>
-                        <a href="">nuevo like</a>
-                    </div>
-                    <div>
-                        <a href="">nuevo comentario</a>
-                    </div>
+                    <?php
+                    }?>
                 </li>
             </ul>
         </div>    
@@ -35,6 +66,171 @@
         <a href="../PHP/Perfil.php">Perfil</a>
         <a href="../Controller/ControllerLogin.php?cerrarSesion=1" >cerrar sesion</a>    
         </header>
+
+    
+  <div  class="Publicacion"> 
+        <ul>
+            
+            <?php
+               
+            $publicacion=new Publicacion();
+            $usuario=$listPublicacion->getUsuario();
+            $publicacion=$listPublicacion->getPublicacion();
+
+            ?>
+
+            <li class="Posts" id="<?php echo $publicacion->getIdPublicacion() ?>">
+                <div class="PerfilPost">
+                    <a href=Perfil.php?id=<?php echo $publicacion->getIdUsuario() ?> class="ProfilePicturePost">
+                            <?php 
+                                if(empty($usuario->getFotoPerfil())) 
+                                {
+                            ?>
+                                <img src="../Multimedia/unknown.jpg" alt="Picture">
+                            <?php
+                                }
+
+                                else
+                                {
+                            ?>
+                                <img src="<?php echo 'data:image/jpeg;base64,'.base64_encode($usuario->getFotoPerfil()).''; ?>" alt="Profile Picture">
+                            <?php
+                                }
+                            ?>
+                    </a>
+                    <a href=Perfil.php?id=<?php echo $publicacion->getIdUsuario() ?> ><p class="NombrePerfilPost"><?php echo $usuario->getNombre() ?></p></a>
+                    <div class="opcionesPublicacionM" id="botonOpciones" >
+                        <div class="opcionesPublicacionM" id="imagenOpciones">
+                            <img src="../Multimedia/abajo.png"  >
+                        </div> 
+                        <div class="opcionesPublicacion" id='opciones'>
+                            <ul><?php if($usuarioSesion->getIdUsuario()==$publicacion->getIdUsuario())
+                                {
+                                    ?>
+                                <li>
+                                    <a href="../Controller/ControllerPublicar.php?borrar=<?php echo $publicacion->getIdPublicacion() ?>" >Borrar</a>
+                                 </li>
+                                <li>
+                                Editar
+                                </li>
+                                <?php
+                                } 
+                                else
+                                {
+                                ?>
+                                <li>
+                                    <a href="../Controller/ControllerDenuncia.php?idPublicacion=<?php echo $publicacion->getIdPublicacion(); ?>&idUsuario=<?php echo $publicacion->getIdUsuario() ?>" >Denunciar</a>
+                                </li>                                
+                                <?php
+                                }
+                                ?>
+
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <p class="TituloPost"><?php echo $publicacion->getTitulo(); ?></p>
+                
+                <?php if( $publicacion->getTipoContenido()=="mp4"){ ?>
+                
+                <video controls>
+                    <source src="<?php echo $publicacion->getPath()?>"  type=video/mp4> 
+                    Este browser no acepta videos
+		</video>
+                <?php } 
+                else
+                {
+                    ?>
+                <img src="<?php echo $publicacion->getPath() ?>" alt="Publicacion">
+                    <?php
+
+                }?>
+                
+                
+                <div>
+                    <p class="ComentarioTitulo"><?php echo $publicacion->getDescripcion() ?></p>
+                </div>
+                <div class="PublicarComentario" >
+                     <form action="../Controller/ControllerComentario.php" method="POST"  >
+                        <input type="text" required name="comentario" placeholder="Comentar" min="3" max="200">
+                        <input type="hidden" name="idPublicacion" value="<?php echo $publicacion->getIdPublicacion() ?>">
+                        <input type="submit" name="comentar">
+                    </form>
+                </div>
+                <ul class="Comentario">
+
+                     <?php
+                    $listComentario=$daoComentario->BuscarComentario($publicacion->getIdPublicacion());
+                    for($index2=0;$index2<count($listComentario);$index2++)
+                    {
+                        $comentario = new Comentario();
+                        $usuario= new usuario();
+                        $comentario=$listComentario[$index2];
+                        $usuario=$comentario->getUsuario();
+                    ?>
+                    <li >
+                        <div class="PerfilPost">
+                            <a href="" class="ProfilePicturePost">
+                            <?php 
+                                if(empty($usuario->getFotoPerfil())) 
+                                {
+                            ?>
+                                <img src="../Multimedia/unknown.jpg" alt="Picture">
+                            <?php
+                                }
+
+                                else
+                                {
+                            ?>
+                                <img src="<?php echo 'data:image/jpeg;base64,'.base64_encode($usuario->getFotoPerfil()).''; ?>" alt="Profile Picture">
+                            <?php
+                                }
+                            ?>
+                            </a>
+                            <a href=""><label class="NombrePerfilPost"><?php echo $usuario->getNombre() ?><label></a>
+                        </div>
+                        <div><?php echo $comentario->getFecha() ?></div>
+                        
+                        <div >
+                            <p> <?php echo $comentario->getComentario() ?></p>
+                        </div>
+                    </li>
+                    
+                    <?php
+                    
+                    }
+                    ?>
+                </ul>
+            </li>
+
+
+            
+            
+        </ul>
+        
+        
+        <!--
+        <div class="Publicacion">
+            <a href=""><img src="" alt="Profile Picture"></a>
+          <p>Nombre</p>
+            <img src="https://docs.unrealengine.com/latest/images/Support/Builds/ReleaseNotes/2016/4_13/image_11.gif" alt="Publicacion">
+          <div>
+                    <p>comentario</p>
+            </div>
+            <div class="PublicarComentario" >
+                    <form>
+                    <input type="text" placeholder="Comentar">
+                <input type="submit">
+                </form>
+            </div>
+        </div>
+        -->
+    </div>
+    
+    
+    
     
         <footer>
         <div>Iconos diseñados por <a href="http://www.flaticon.es/autores/chanut-is-industries" title="Chanut is Industries">Chanut is Industries</a> desde <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> con licencia <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>

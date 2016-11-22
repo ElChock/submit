@@ -13,29 +13,25 @@
  */
 class Likes implements JsonSerializable {
     
-    function getIdUsuario() {
+    public function getIdUsuario() {
         return $this->idUsuario;
     }
 
-    function getIdPublicacion() {
+    public function getIdPublicacion() {
         return $this->idPublicacion;
     }
 
-    function getFecha() {
-        return $this->fecha;
-    }
 
-    function setIdUsuario($idUsuario) {
+
+    public function setIdUsuario($idUsuario) {
         $this->idUsuario = $idUsuario;
     }
 
-    function setIdPublicacion($idPublicacion) {
+    public function setIdPublicacion($idPublicacion) {
         $this->idPublicacion = $idPublicacion;
     }
 
-    function setFecha($fecha) {
-        $this->fecha = $fecha;
-    }
+
 
     public function jsonSerialize() {
         return get_object_vars($this);
@@ -43,5 +39,5 @@ class Likes implements JsonSerializable {
 
     private $idUsuario;
     private $idPublicacion;
-    private $fecha;
+    
 }

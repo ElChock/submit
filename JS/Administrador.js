@@ -76,7 +76,7 @@ function LlamarRazon ()
             html1+="</select>";
             html1+="<input type=hidden name=idUsuario value="+listDenuncia[i].publicacion.idUsuario+" >";
             html1+="<input type=hidden name=idPublicacion value="+listDenuncia[i].publicacion.idPublicacion+" >";
-            html1+="<label>Bloquear hasta</label><input type=date name=fecha id=Salto ><label>Bloquear permanentemente</label><input type=checkbox name=permanente ><input type=text name=comentario placeholder=Comentario min=3 max=200><input type=submit name=bloquear value=Bloquear><input type=submit name=rechazar value=Rechazar></form></div></li>";
+            html1+="<label>Bloquear hasta</label><input type=date name=fecha id=Salto ><label>Bloquear permanentemente</label><input type=checkbox value=s name=permanente ><input type=text name=comentario placeholder=Comentario min=3 max=200><input type=submit name=bloquear value=Bloquear><input type=submit name=rechazar value=Rechazar></form></div></li>";
             
             
             $(html1).appendTo("#denuncia");
