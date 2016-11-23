@@ -22,18 +22,17 @@ $(document).ready(function ()
     $(".Notificacion").click(function ()
     {
         var li=$(this).find(".Notificacionli");
-        
         li.toggleClass("Ocultar");
     });
     
-    $(".Notificacionli").click(function ()
+    $(".notificacion").click(function ()
     {
-        var contenedor=$(this).find("div");
+        var paramidNotificacion=$(this).attr("idnotificacion");
+        $.post("../Controller/ControllerNotificacion.php", {idNotificacion: paramidNotificacion} );
         
-        var paramidNotificacion =$(contenedor).attr("idNotificacion");
-        $.post("../Controller/ControllerNotificacion.php", {idNotificacion: paramidNotificacion},function(data, status){alert(data);} );
-        alert(paramidNotificacion);
     });
+    
+    
     
     $("p:contains('#')").each(function()
     {
@@ -50,8 +49,8 @@ $(document).ready(function ()
         }
         
         parrafo=(parrafo).slice(z,(parrafo).length);
-        
-        var link="<a href=../PHP/Busqueda.php?buscar="+s+">" +s+ "</a>";
+        s=(s).slice(1,z);
+        var link="<a href=../PHP/BusquedaPublicacion.php?buscar=%23"+s+">#" +s+ "</a>";
         $(this).html(link+" "+parrafo);
         
     });

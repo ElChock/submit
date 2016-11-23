@@ -54,7 +54,7 @@ class DaoNotificacion {
         }
     }
     
-    public function MarcarNotificaciones($idUsuario)
+    public function MarcarNotificaciones($idNotificacion)
     {
         $conn= new MySqlCon();
         $connect= $conn->connect();
@@ -66,7 +66,7 @@ class DaoNotificacion {
         {
             try 
             {
-                $stmt=$connect->prepare("call sp_marcarnotificaciones($idUsuario)");
+                $stmt=$connect->prepare("call sp_marcarnotificaciones($idNotificacion)");
                 if($stmt->execute())
                 {
                     
@@ -84,6 +84,30 @@ class DaoNotificacion {
             {
                 $connect->close();
             }
+        }
+    }
+    
+    public  function MarcarTodasNotificaciones($idUsuario)
+    {
+        $conn= new MySqlCon();
+        $connect=$conn->connect();
+        if(mysqli_connect_errno())
+        {
+            printf("Error de conexion: %s\n", mysqli_connect_error());
+        }
+        else 
+        {
+            $stmt=$connect->prepare("call sp_marcarTodasNotificaciones($idUsuario)");
+            if($stmt->execute())
+            {
+                
+            }
+            else
+            {
+                $connect->close();
+                echo $stmt->error;
+            }
+            
         }
     }
 }

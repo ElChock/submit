@@ -61,13 +61,19 @@ $notificacion=$daoNotificacion->BuscarNotificacion($usuarioSesion->getIdUsuario(
                     {
                     ?>
                     <div>
-                        <a idNotificacion="<?php echo $notificacion[$index]->getIdNotificacion() ?>" href="Publicacion.php?idPublicacion=<?php echo $notificacion[$index]->getIdPublicacion() ?>"><?php echo $notificacion[$index]->getDescripcion() ?></a>
+                        <span><?php if($notificacion[$index]->getVista()=="n") {echo "no";} else{echo "si";}?></span><a class="notificacion" visto="<?php echo $notificacion[$index]->getVista() ?>" idNotificacion="<?php echo $notificacion[$index]->getIdNotificacion() ?>" href="Publicacion.php?idPublicacion=<?php echo $notificacion[$index]->getIdPublicacion() ?>"><?php echo $notificacion[$index]->getDescripcion() ?></a>
                     </div>
                     <?php
                     }?>
-                
+                    <div>
+                        <form action="../Controller/ControllerNotificacion.php" method="POST" >
+                            <button type="submit" id="Leer" value="visto" name="leer" >Leido</button>
+                        </form>
+                    </div>
                 </li>
+             
             </ul>
+            
         </div>    
         
         <a href="../PHP/Perfil.php">Perfil</a>

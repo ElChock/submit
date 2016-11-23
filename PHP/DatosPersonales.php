@@ -1,6 +1,8 @@
 
 <?php
 include_once '../Model/Usuario.php';
+include_once '../Dao/DaoNotificacion.php';
+include_once '../Model/Notificacion.php';
 session_start();
 if($_SESSION["usuario"]==null)
 {
@@ -9,26 +11,54 @@ if($_SESSION["usuario"]==null)
 $usuario= new Usuario();
 $s=$_SESSION["usuario"];
 $usuario=  unserialize($s);
+$daoNotificacion= new DaoNotificacion();
+$notificacion = new Notificacion();
+$notificacion=$daoNotificacion->BuscarNotificacion($usuario->getIdUsuario());
 ?>
 
 <!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>Documento sin título</title>
+<title>Submit</title>
 <link href="../CSS/CSSLogin.css" rel="stylesheet" type="text/css">
+<script language="javascript" type="text/javascript" src="../JS/libs/jquery/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="../JS/js.js"></script>
 </head>
 
 <body>
     <header class="HeaderPrincipal">
         <a href="../PHP/Principal.php"><h1>S</h1></a>
-        <form  class="Buscador">
-            <input type="text" required min="2" maxlength="20">
+        <form action="../php/Busqueda.php" class="Buscador" method="get">
+            <input type="text" name="buscar" required min="2" maxlength="20">
             <input type="submit" value="Buscar">
+            <a href="../PHP/BusquedaPublicacion.php"><label>Buscar Publicacion</label></a>
         </form>
         <div class="Notificacion">
             <img src="../Multimedia/notificacion.png" alt="Notificaciones" >
+            <ul class="Notificacionli Ocultar">
+                <li>
+                
+                    <?php
+                    for($index=0;$index<count($notificacion);$index++)
+                    {
+                    ?>
+                    <div>
+                        <span><?php if($notificacion[$index]->getVista()=="n") {echo "no";} else{echo "si";}?></span><a class="notificacion" visto="<?php echo $notificacion[$index]->getVista() ?>" idNotificacion="<?php echo $notificacion[$index]->getIdNotificacion() ?>" href="Publicacion.php?idPublicacion=<?php echo $notificacion[$index]->getIdPublicacion() ?>"><?php echo $notificacion[$index]->getDescripcion() ?></a>
+                    </div>
+                    <?php
+                    }?>
+                    <div>
+                        <form action="../Controller/ControllerNotificacion.php" method="POST" >
+                            <button type="submit" id="Leer" value="visto" name="leer" >Leido</button>
+                        </form>
+                    </div>
+                </li>
+             
+            </ul>
+            
         </div>    
+        
         <a href="../PHP/Perfil.php">Perfil</a>
         <a href="../Controller/ControllerLogin.php?cerrarSesion=1" >cerrar sesion</a>    
     </header>

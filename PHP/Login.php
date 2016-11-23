@@ -34,7 +34,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Documento sin título</title>
+<title>Submit</title>
 <link href="../CSS/CSSLogin.css" rel="stylesheet" type="text/css">
 <script>
     

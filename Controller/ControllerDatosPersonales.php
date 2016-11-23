@@ -55,9 +55,9 @@ if(!empty($_POST["fotoPortada"]))
     $usuario=  unserialize($s);
     $imagen=$_FILES["portada"]["tmp_name"];
     $foto=$daoUsuario->ActualizarFotoPortada($usuario->getIdUsuario(),$imagen);
-    $usuario->setFotoPortada($foto);
-    echo $foto;
+    $usuario->setFotoPortada($foto);    
     $s2=serialize($usuario);
+    session_unset();
     $_SESSION["usuario"]=$s2;
     header('Location: ../PHP/DatosPersonales.php');
     

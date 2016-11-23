@@ -208,9 +208,9 @@ class DaoUsuario {
             if($stmt->execute())
             {
                 $stmt->bind_result($fotoPortada);
-                
+                $foto=$fotoPortada;
                 $connect->close();
-                return $data;
+                return $foto;
             }
             else 
             {

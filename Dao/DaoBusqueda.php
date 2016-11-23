@@ -13,6 +13,8 @@
  */
 include_once 'MySqlCon.php';
 include_once '../Model/Usuario.php';
+include_once '../Model/Publicacion.php';
+include_once '../Model/V_publicacion.php';
 class DaoBusqueda 
 {
     public function BuscarPersona($nombre)
@@ -64,6 +66,60 @@ class DaoBusqueda
             {
                 $connect->close();
             }
+        }
+    }
+    
+    public function BuscarPublicaciones($nombre,$fechaIncio,$fechaFin)
+    {
+        $conn= new MySqlCon();
+        $connect=$conn->connect();
+        if(mysqli_connect_errno())
+        {
+            
+        }
+        else
+        {
+            $stmt=$connect->prepare("call sp_buscarPublicaciones(?,?,?)");
+
+            $stmt->bind_param("sss", $nombre,$fechaIncio,$fechaFin);
+            if($stmt->execute())
+            {
+                $listPublicaciones = array();
+                $stmt->bind_result($idPublicacion,$idUsuario,$descripcion,$titulo,$path,$tipoContenido,$fecha,$fotoPerfil,$nombre,$publico,$like);
+                $contador=0;
+                
+                while($stmt->fetch())
+                {
+                    $publicacion = new Publicacion();
+                    $usuario= new Usuario();
+                    $vPublicacion= new V_publicacion();
+                    $stmt->fetch();
+                    $publicacion->setDescripcion($descripcion);
+                    $publicacion->setFecha($fecha);
+                    $publicacion->setIdPublicacion($idPublicacion);
+                    $publicacion->setIdUsuario($idUsuario);
+                    $publicacion->setPath($path);
+                    $publicacion->setTipoContenido($tipoContenido);
+                    $publicacion->setTitulo($titulo);
+                    $usuario->setFotoPerfil($fotoPerfil);
+                    $usuario->setNombre($nombre);
+                    $vPublicacion->setLikes($like);
+                    $vPublicacion->setPublicacion($publicacion);
+                    $vPublicacion->setUsuario($usuario);
+                    $listPublicaciones[$contador]=$vPublicacion;
+                    $contador++;
+                }
+                    $connect->close();
+                    return $listPublicaciones;
+                    
+            }
+            else
+            {
+                echo $fechaIncio;
+                echo $stmt->error;
+                $connect->close();
+            }
+                    
         }
     }
 }
