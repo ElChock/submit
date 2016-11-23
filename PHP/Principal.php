@@ -103,7 +103,7 @@ $notificacion=$daoNotificacion->BuscarNotificacion($usuarioSesion->getIdUsuario(
           <input type="text" name="titulo" required placeholder="Titulo" min="3" max="20">
             <br>
             <div class="EspacioSubir">
-                <input type="file" required name="archivo"  aria-label="subir" accept=".mp4,.jpg,.gif,.avi,.png" >
+                <input type="file" required name="archivo"  aria-label="subir" accept=".mp4,.jpg,.gif,.png" >
             </div>
             <br>
             <input type="text" name="descripcion" placeholder="Comentario" min="3" maxlength="400">
@@ -180,7 +180,7 @@ $notificacion=$daoNotificacion->BuscarNotificacion($usuarioSesion->getIdUsuario(
                 
                 <p class="TituloPost"><?php echo $publicacion->getTitulo(); ?></p>
                 
-                <?php if( $publicacion->getTipoContenido()=="mp4"){ ?>
+                <?php if( $publicacion->getTipoContenido()=="mp4" ||$publicacion->getTipoContenido()=="avi"){ ?>
                 
                 <video controls>
                     <source src="<?php echo $publicacion->getPath()?>"  type=video/mp4> 

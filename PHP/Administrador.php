@@ -1,6 +1,22 @@
 <?php
 include_once '../Dao/DaoNotificacion.php';
 include_once '../Model/Notificacion.php';
+include_once  "../Model/Usuario.php";
+session_start();
+
+$usuarioSesion= new Usuario();
+if($_SESSION["usuario"]==null)
+{
+    header('Location: ../PHP/Login.php');
+}
+$s=$_SESSION["usuario"];
+
+$usuarioSesion= unserialize($s);  
+if($usuarioSesion->getIdUsuario()==null)
+{
+    header('Location: ../PHP/Login.php');
+}
+
 $daoNotificacion= new DaoNotificacion();
 $notificacion = new Notificacion();
 $notificacion=$daoNotificacion->BuscarNotificacion($usuarioSesion->getIdUsuario());

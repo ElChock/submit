@@ -99,9 +99,11 @@ include_once '../Model/V_bloqueado.php';
             
             if($idUsuario!=0)
             {
-                $razonBloqueado= new V_bloqueado();
-                $razonBloqueado=$daoUsusuario->RazonBloqueado($idUsuario);
-                echo $razonBloqueado->getRazon();
+                session_start();
+                $usuarioLogin=$daoUsusuario->Login($usuario);
+                $s= serialize($usuarioLogin);
+                $_SESSION["usuario"]=$s;                
+                header('Location: ../PHP/Bloqueado.php');
             }
             else 
             {
